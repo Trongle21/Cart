@@ -1,0 +1,43 @@
+function renderCart(name, image, price, size, li) { const btnAdd = li.querySelectorAll('.btn-add'); const cart = document.querySelector('.cart'); btnAdd.forEach((e) => { e.addEventListener('click', () => { cart.classList.add('show') const priceInfo =
+document.querySelector('.price-info'); const div = document.createElement('div'); div.classList.add('cart-info'); const priceInfoCart = document.querySelectorAll('.cart-info'); for (let value of priceInfoCart) { const checkProduct = value.querySelector('.title')
+if (checkProduct .innerHTML === name) { alert('san pham') } } div.innerHTML = ''; div.innerHTML = `
+<div class="cart-img">
+    <img src="${image}" alt="">
+</div>
+<div class="pay-info">
+    <h6 class="title">${name}</h6>
+    <span>${price}</span>
+    <button class="delete">Delete</button>
+    <h3>Small</h3>
+    <div class="price">
+        <span>$</span>
+        <h4>40000</h4>
+        <div class="quantity">
+            <button class="quantity-button decrease">-</button>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="quantity-button increase">+</button>
+        </div>
+    </div>
+</div>
+`; priceInfo.appendChild(div) // Xử lý tăng giảm số lượng sản phẩm changeProduct(div) // Xử lý khi mua sản phẩm giống nhau sameProduct(div, li, name) }); }); } e.addEventListener('click', () => { cart.classList.add('show') const priceInfo = document.querySelector('.price-info');
+const div = document.createElement('div'); div.classList.add('cart-info'); const priceInfoCart = document.querySelectorAll('.cart-info'); for (let value of priceInfoCart) { const checkProduct = value.querySelector('.title') if (checkProduct .innerHTML
+=== name) { alert('san pham') } } div.innerHTML = ''; div.innerHTML = `
+<div class="cart-img">
+    <img src="${image}" alt="">
+</div>
+<div class="pay-info">
+    <h6 class="title">${name}</h6>
+    <span>${price}</span>
+    <button class="delete">Delete</button>
+    <h3>Small</h3>
+    <div class="price">
+        <span>$</span>
+        <h4>40000</h4>
+        <div class="quantity">
+            <button class="quantity-button decrease">-</button>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="quantity-button increase">+</button>
+        </div>
+    </div>
+</div>
+`; priceInfo.appendChild(div) // Xử lý tăng giảm số lượng sản phẩm changeProduct(div) // Xử lý khi mua sản phẩm giống nhau // sameProduct(div, li, name)
