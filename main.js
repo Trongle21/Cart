@@ -147,7 +147,8 @@ function renderProducts(params) {
 
         // select 
         handleSelect(li)
-            // Hiển thị giỏ hàng
+
+        // Hiển thị giỏ hàng
         renderCart(name, image, price, size, topping, li);
     }
 }
@@ -276,7 +277,6 @@ function renderCart(name, image, price, size, topping, li) {
                 </div>
             </div>
             `;
-            priceInfo.appendChild(div)
 
             // Xử lý tăng giảm số lượng sản phẩm
             changeProduct(div)
@@ -289,6 +289,14 @@ function renderCart(name, image, price, size, topping, li) {
 
             // Total
             totalPrice(cartInfo, li)
+
+            // Xóa sản phẩm
+            deleteProduct(div)
+
+            totalPrice(document.querySelectorAll('.cart-info'))
+
+            priceInfo.appendChild(div)
+
 
         });
     });
@@ -338,7 +346,7 @@ function totalPrice(cartInfo, priceSize, li) {
         const quantity = value.querySelector('.quantity-input').value;
         const price = priceProduct * quantity
         total += price
-        totalPrice.innerHTML = total
+        totalPrice.innerHTML = total.toLocaleString()
     }
 }
 
@@ -346,5 +354,14 @@ function changePrice(div) {
     const input = div.querySelector(".quantity-input")
     input.addEventListener('change', function() {
         totalPrice()
+    })
+}
+
+function deleteProduct(div) {
+    const removeProduct = div.querySelector('.delete')
+    removeProduct.addEventListener('click', (e) => {
+        const item = removeProduct.parentElement.parentElement;
+        item.remove()
+        totalPrice(document.querySelectorAll('.cart-info'))
     })
 }
