@@ -100,8 +100,11 @@ let products = [{
     }
 }, ]
 
+let cart = {};
+
 function renderProducts(params) {
     if (!params) return false;
+    console.log[params[]]
     for (let [k, v] of Object.entries(params)) {
         let { name, image, price, size, ice, sugar, topping } = v;
         const productList = document.querySelector('.product-list');
@@ -113,7 +116,7 @@ function renderProducts(params) {
                 <img src="${image}" alt="">
             </div>
             <div class="product-info">
-                <h2>${name}</h2><span>${price}</span>
+                <h2>${name}</h2><span>${price.toLocaleString()}</span>
                 <div class="select-size">
                     <h6 class="width">Size</h6>
                     M <button class="btn btn-size size-m">${size.m.toLocaleString()}</button>
@@ -150,6 +153,10 @@ function renderProducts(params) {
 
         // Hiển thị giỏ hàng
         renderCart(name, image, price, size, topping, li);
+
+        // Đóng giỏ hàng
+        closeCart()
+
     }
 }
 renderProducts(products);
@@ -176,6 +183,7 @@ function selectOption(li) {
         button.addEventListener('click', (e) => {
             e.currentTarget.classList.toggle('click');
             if (e.currentTarget.classList.contains('click')) {
+
                 btnIce.forEach(span => {
                     if (e.currentTarget !== span) {
                         span.classList.remove('click');
@@ -250,12 +258,21 @@ function renderCart(name, image, price, size, topping, li) {
     const cart = document.querySelector('.cart');
     btnAdd.forEach((e) => {
         e.addEventListener('click', () => {
-            cart.classList.add('show')
             const priceSpan = document.querySelector('.total-price span')
-            priceSpan.innerHTML = `${price}`
+            priceSpan.innerHTML = `${price.toLocaleString()}`
+            cart.classList.add('show')
             const priceInfo = document.querySelector('.price-info');
             const div = document.createElement('div');
             div.classList.add('cart-info');
+            const quantityInput = document.querySelector('.quantity-input');
+            const productCart = document.querySelectorAll('.price-info div')
+            for (let value of productCart) {
+                const checkName = value.querySelector(".title")
+                if (checkName == name) {
+                    quantityInput.value++
+                        totalPrice(document.querySelectorAll('.cart-info'))
+                }
+            }
             const cartInfo = document.querySelectorAll('.cart-info')
             div.innerHTML = '';
             div.innerHTML = `
@@ -277,12 +294,13 @@ function renderCart(name, image, price, size, topping, li) {
                 </div>
             </div>
             `;
+            priceInfo.appendChild(div)
 
             // Xử lý tăng giảm số lượng sản phẩm
             changeProduct(div)
 
             // Xử lý khi mua sản phẩm giống nhau
-            sameProduct(div, li, name)
+            // sameProduct(div, li, name)
 
             /** Tổng giá tiền sau khi tăng số lượng */
             changePrice(div)
@@ -291,16 +309,44 @@ function renderCart(name, image, price, size, topping, li) {
             totalPrice(cartInfo, li)
 
             // Xóa sản phẩm
-            deleteProduct(div)
+            deleteProduct(div, priceInfo)
 
             totalPrice(document.querySelectorAll('.cart-info'))
-
-            priceInfo.appendChild(div)
-
 
         });
     });
 }
+
+function handleOption() {
+    // const btnAdd = document.querySelectorAll('.btn-add')
+    // const cart = document.querySelector('.cart')
+    // const totalPrice = document.querySelector('.total-price span')
+
+    // btnAdd.forEach((add) => {
+    //     add.addEventListener('click', (e) => {
+    //         // Kiểm tra topping
+    //         const selectedTp = document.querySelector('.btn-tp.click');
+    //         const selectedSize = document.querySelector('.btn-size.click');
+    //         if (!selectedTp && !selectedSize) {
+    //             alert('Vui lòng chọn topping và size');
+    //         }
+    //         if (!selectedTp && selectedSize) {
+    //             alert('Vui lòng chọn topping');
+    //         }
+    //         if (!selectedSize && selectedTp) {
+    //             alert('Vui lòng chọn size');
+    //         }
+    //         if (selectedTp || selectedTp) {
+    //             cart.classList.add('show')
+    //         }
+    //     })
+    // })
+}
+handleOption()
+
+// function handlePriceSelect() {
+
+// }
 
 function changeProduct(div) {
     const decrease = div.querySelector('.decrease');
@@ -321,24 +367,20 @@ function changeProduct(div) {
     })
 }
 
-function sameProduct(div, li, name) {
-    const btnAdd = li.querySelectorAll('.btn-add');
-    const quantityInput = div.querySelector('.quantity-input');
-    const title = div.querySelector('.title');
-    btnAdd.forEach((button) => {
-        button.addEventListener('click', (e) => {
-            // for (let value of title) {
-            //     if (name === value.innerHTML) {
-            //         quantityInput.value++;
-            //     }
-            // }
-            // if (name === title.innerHTML) {}
-            quantityInput.value++;
-        });
-    });
-}
+// function sameProduct(div, li) {
+//     const btnAdd = li.querySelectorAll('.btn-add');
+//     const quantityInput = div.querySelector('.quantity-input');
+//     const title = div.querySelector('.title').innerHTML;
+//     btnAdd.forEach((button) => {
+//         button.addEventListener('click', (e) => {
+//             if (title) {
+//                 quantityInput.value++;
+//             }
+//         });
+//     });
+// }
 
-function totalPrice(cartInfo, priceSize, li) {
+function totalPrice(cartInfo) {
     let total = 0;
     for (let value of cartInfo) {
         const totalPrice = document.querySelector('.total-price span')
@@ -357,11 +399,23 @@ function changePrice(div) {
     })
 }
 
-function deleteProduct(div) {
+function deleteProduct(div, priceInfo) {
     const removeProduct = div.querySelector('.delete')
     removeProduct.addEventListener('click', (e) => {
         const item = removeProduct.parentElement.parentElement;
         item.remove()
         totalPrice(document.querySelectorAll('.cart-info'))
+        if (!priceInfo.querySelector('.pay-info')) {
+            const totalPrice = document.querySelector('.total-price span')
+            totalPrice.innerHTML = 0;
+        }
+    })
+}
+
+function closeCart() {
+    const cart = document.querySelector('.cart')
+    const icon = document.querySelector('.icon')
+    icon.addEventListener('click', (e) => {
+        cart.classList.remove('show')
     })
 }

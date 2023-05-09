@@ -246,7 +246,7 @@ function addProduct(li, product) {
         //     return;
         // }
         cartegory[key]['quantity'] += 1
-        cartegory[key]['totalPrice'] = cartegory[key]['quantity'] * cartegory[key]['price']
+            // cartegory[key]['totalPrice'] = cartegory[key]['quantity'] * cartegory[key]['price']
     } else {
         cartegory[key] = newProduct
     }
@@ -259,6 +259,7 @@ function renderCart(cartegory, product) {
         console.log(v.price)
         if (document.querySelector('.btn-size.click') && document.querySelector('.btn-ice.click') && document.querySelector('.btn-sugar.click')) {
             const div = document.createElement('div');
+            cart.classList.add('show')
             div.classList.add('cart-info');
             div.innerHTML = '';
             div.innerHTML = `
@@ -279,8 +280,7 @@ function renderCart(cartegory, product) {
             </div>
             `;
             priceInfo.appendChild(div);
-            cart.classList.add('show')
-                // Xóa sản phẩm
+            // Xóa sản phẩm
             document.querySelectorAll('.delete').forEach((btnDelete) => {
                 btnDelete.addEventListener('click', () => {
                     deleteProduct(k);
@@ -298,9 +298,8 @@ function renderCart(cartegory, product) {
             // Tổng tiền tất cả các sản phẩm
             totalAllProduct(cartegory, v);
 
-            // // Đóng giỏ hàng
-            // closeCart()
-            return;
+            // Đóng giỏ hàng
+            closeCart()
         }
     }
 }
@@ -343,16 +342,13 @@ function totalAllProduct() {
         totalAllItem += priceItem;
     }
     billTotal.innerHTML = totalAllItem
-    if (totalAllItem === 0) {
-
-    }
 }
 
-// function closeCart() {
-//     const icon = document.querySelector('.icon')
-//     icon.addEventListener('click', () => {
-//         if (icon) {
-//             cart.classList.remove('show')
-//         }
-//     })
-// }
+function closeCart() {
+    const icon = document.querySelector('.icon')
+    icon.addEventListener('click', () => {
+        if (icon) {
+            cart.classList.remove('show')
+        }
+    })
+}

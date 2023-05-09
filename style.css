@@ -293,7 +293,7 @@ i {
 
 .product-info {
     padding-top: 1rem;
-    margin-bottom: 10rem;
+    margin-bottom: 12rem;
     float: right;
 }
 
@@ -374,7 +374,16 @@ i {
     position: absolute;
     bottom: 4rem;
     left: 1rem;
+    justify-content: center;
+    align-items: center;
 }
+
+.topping h1 {
+    width: 8rem;
+    margin-right: 4rem;
+}
+
+.topping button {}
 
 .topping .btn {
     margin: 2px;
@@ -390,7 +399,6 @@ i {
     bottom: 0;
     left: 1rem;
     font-size: 1.1rem;
-    margin-top: 6rem;
     margin-bottom: 1rem;
     width: 25rem;
     height: 2.5rem;
@@ -417,14 +425,11 @@ i {
 }
 
 .cart {
-    visibility: hidden;
-    transition: all 0.3s ease;
-    opacity: 0;
+    display: none;
 }
 
 .cart.show {
-    visibility: inherit;
-    opacity: 1;
+    display: block;
 }
 
 .account {
