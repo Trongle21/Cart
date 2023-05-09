@@ -192,32 +192,32 @@ function addProduct(li, product) {
         alert('Vui lòng chọn size');
         return false
     }
-    // // Khi không chọn ice
-    // if (!li.querySelector('.btn-ice.click')) {
-    //     alert('Vui lòng chọn ice');
-    //     return false
-    // }
-    // // Khi không chọn sugar
-    // if (!li.querySelector('.btn-sugar.click')) {
-    //     alert('Vui lòng chọn đường');
-    //     return false
-    // }
+    // Khi không chọn ice
+    if (!li.querySelector('.btn-ice.click')) {
+        alert('Vui lòng chọn ice');
+        return false
+    }
+    // Khi không chọn sugar
+    if (!li.querySelector('.btn-sugar.click')) {
+        alert('Vui lòng chọn đường');
+        return false
+    }
 
     // Khi chọn size
     if (li.querySelector('.btn-size.click')) {
         choiceSize = li.querySelector('.btn-size.click').innerHTML;
         newProduct.price = parseInt(choiceSize)
     }
-    // // Khi chọn ice
-    // if (li.querySelector('.btn-ice.click')) {
-    //     choiceIce = li.querySelector('.btn-ice.click').innerHTML;
-    //     newProduct.ice = parseInt(choiceIce)
-    // }
-    // // Khi chọn sugar
-    // if (li.querySelector('.btn-sugar.click')) {
-    //     choiceSugar = li.querySelector('.btn-sugar.click').innerHTML;
-    //     newProduct.ice = parseInt(choiceSugar)
-    // }
+    // Khi chọn ice
+    if (li.querySelector('.btn-ice.click')) {
+        choiceIce = li.querySelector('.btn-ice.click').innerHTML;
+        newProduct.ice = parseInt(choiceIce)
+    }
+    // Khi chọn sugar
+    if (li.querySelector('.btn-sugar.click')) {
+        choiceSugar = li.querySelector('.btn-sugar.click').innerHTML;
+        newProduct.ice = parseInt(choiceSugar)
+    }
     // Khi chọn topping
     if (li.querySelector('.btn-tp.click')) {
         choiceTopping = li.querySelector('.btn-tp.click').innerHTML;
@@ -227,15 +227,10 @@ function addProduct(li, product) {
         newProduct.topping = '';
     }
 
-    // let key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}-${choiceTopping}`;
-    // if (!choiceTopping) {
-    //     key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}`;
-    // }
-    let key = `${id}-${choiceSize}-${choiceTopping}`;
+    let key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}-${choiceTopping}`;
     if (!choiceTopping) {
-        key = `${id}-${choiceSize}`;
+        key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}`;
     }
-
 
     // Xử lý khi sản phẩm trùng lặp
 
