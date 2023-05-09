@@ -120,7 +120,7 @@ function renderProduct(params) {
             <h2>${name}</h2><span>${price.toLocaleString()}</span>
             <div class="select-size">
                 <h6 class="width">Size</h6>
-                M <button class="btn btn-size">${size.m}</button>
+                M <button class="btn btn-size click">${size.m}</button>
                 L <button class="btn btn-size">${size.l}</button>
             </div>
             <div class="select-ice">
@@ -231,8 +231,8 @@ function addProduct(li, product) {
     if (!choiceTopping) {
         key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}`;
     }
-
-    // Xử lý khi sản phẩm trùng lặp
+    console.log(key)
+        // Xử lý khi sản phẩm trùng lặp
 
     if (cartegory[key]) {
         // const quantityInput = document.querySelector('.quantity-input')
@@ -251,7 +251,6 @@ function addProduct(li, product) {
 function renderCart(cartegory, product) {
     let { id, image, name, price, size, ice, sugar, topping } = product
     for (let [k, v] of Object.entries(cartegory)) {
-        console.log(v.price)
         if (document.querySelector('.btn-size.click') && document.querySelector('.btn-ice.click') && document.querySelector('.btn-sugar.click')) {
             const div = document.createElement('div');
             cart.classList.add('show')
@@ -277,8 +276,8 @@ function renderCart(cartegory, product) {
             priceInfo.appendChild(div);
             // Xóa sản phẩm
             document.querySelectorAll('.delete').forEach((btnDelete) => {
-                btnDelete.addEventListener('click', () => {
-                    deleteProduct(k);
+                btnDelete.addEventListener('click', (e) => {
+                    deleteProduct(e, k, btnDelete);
                 });
             });
 
@@ -299,15 +298,18 @@ function renderCart(cartegory, product) {
     }
 }
 
-function deleteProduct(k) {
-    const deleteItem = document.querySelector(`.cart-info [data-id="${k}"]`);
-    if (deleteItem) {
-        const parent = deleteItem.parentElement.parentElement;
-        if (parent) {
-            parent.remove();
-            totalAllProduct();
-        }
-    }
+function deleteProduct(k, e, btnDelete) {
+    // const deleteItem = document.querySelector(`.cart-info [data-id="${k}"]`);
+    // if (deleteItem) {
+    //     const parent = deleteItem.parentElement.parentElement;
+    //     if (parent) {
+    //         parent.remove();
+    //         totalAllProduct();
+    //     }
+    // }
+    const parent = btnDelete.parentElement.parentElement
+    parent.remove()
+    totalAllProduct();
 }
 
 function changeProduct(btn, quantityInput, v) {
