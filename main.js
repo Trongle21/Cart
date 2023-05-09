@@ -117,7 +117,7 @@ function renderProduct(params) {
             <img src="${image}" alt="">
         </div>
         <div class="product-info">
-            <h2>${name}</h2><span>${price.toLocaleString()}</span>
+            <h2>${name}</h2><span>${price}</span>
             <div class="select-size">
                 <h6 class="width">Size</h6>
                 M <button class="btn btn-size click">${size.m}</button>
@@ -211,12 +211,12 @@ function addProduct(li, product) {
     // Khi chọn ice
     if (li.querySelector('.btn-ice.click')) {
         choiceIce = li.querySelector('.btn-ice.click').innerHTML;
-        newProduct.ice = parseInt(choiceIce)
+        newProduct.ice = choiceIce
     }
     // Khi chọn sugar
     if (li.querySelector('.btn-sugar.click')) {
         choiceSugar = li.querySelector('.btn-sugar.click').innerHTML;
-        newProduct.ice = parseInt(choiceSugar)
+        newProduct.ice = choiceSugar
     }
     // Khi chọn topping
     if (li.querySelector('.btn-tp.click')) {
@@ -231,8 +231,7 @@ function addProduct(li, product) {
     if (!choiceTopping) {
         key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}`;
     }
-    console.log(key)
-        // Xử lý khi sản phẩm trùng lặp
+    // Xử lý khi sản phẩm trùng lặp
 
     if (cartegory[key]) {
         // const quantityInput = document.querySelector('.quantity-input')
@@ -294,19 +293,22 @@ function renderCart(cartegory, product) {
 
             // Đóng giỏ hàng
             closeCart()
+                // console.log(div.querySelector('.delete'))
         }
     }
 }
 
 function deleteProduct(k, e, btnDelete) {
-    // const deleteItem = document.querySelector(`.cart-info [data-id="${k}"]`);
-    // if (deleteItem) {
-    //     const parent = deleteItem.parentElement.parentElement;
-    //     if (parent) {
-    //         parent.remove();
-    //         totalAllProduct();
-    //     }
-    // }
+    console.log(Object.keys(cartegory)[0])
+        // const deleteItem = document.querySelector(`.cart-info [data-id="${k}"]`);
+        // if (deleteItem) {
+        //     const parent = deleteItem.parentElement.parentElement;
+        //     if (parent) {
+        //         parent.remove();
+        //         totalAllProduct();
+        //     }
+        // }
+
     const parent = btnDelete.parentElement.parentElement
     parent.remove()
     totalAllProduct();
