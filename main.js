@@ -1,11 +1,11 @@
 let products = [{
     id: 'ts01',
     image: './images/1.webp',
-    name: 'Nhài sữa',
+    name: 'Nước Dâu',
     price: 30000,
     size: {
-        m: 30000,
-        l: 35000
+        M: 30000,
+        L: 35000
     },
     ice: [30, 50, 70],
     sugar: [30, 50, 70],
@@ -26,11 +26,11 @@ let products = [{
 }, {
     id: 'ts02',
     image: './images/2.webp',
-    name: 'Trà sữa',
+    name: 'Cà phê',
     price: 40000,
     size: {
-        m: 40000,
-        l: 45000
+        M: 40000,
+        L: 45000
     },
     ice: [30, 50, 70],
     sugar: [30, 50, 70],
@@ -51,11 +51,11 @@ let products = [{
 }, {
     id: 'ts03',
     image: './images/3.webp',
-    name: 'Cà Phê',
+    name: 'Bạc xỉu',
     price: 50000,
     size: {
-        m: 50000,
-        l: 55000
+        M: 50000,
+        L: 55000
     },
     ice: [30, 50, 70],
     sugar: [30, 50, 70],
@@ -76,11 +76,11 @@ let products = [{
 }, {
     id: 'ts04',
     image: './images/4.webp',
-    name: 'Sữa Chua',
+    name: 'Trà nâu',
     price: 60000,
     size: {
-        m: 60000,
-        l: 65000
+        M: 60000,
+        L: 65000
     },
     ice: [30, 50, 70],
     sugar: [30, 50, 70],
@@ -100,254 +100,317 @@ let products = [{
     }
 }, ]
 
-const productList = document.querySelector('.product-list')
-const cart = document.querySelector('.cart')
-const priceInfo = document.querySelector('.price-info')
-const billTotal = document.querySelector('.total-price span')
+let cart = {};
 
-function renderProduct(params) {
-    if (!params) return false;
-    for (let product of params) {
-        let { id, image, name, price, size, ice, sugar, topping } = product
-        const li = document.createElement('li');
-        li.classList.add('product-name');
-        li.innerHTML = '';
-        li.innerHTML = `
-        <div class="product-img">
-            <img src="${image}" alt="">
-        </div>
-        <div class="product-info">
-            <h2>${name}</h2><span>${price}</span>
-            <div class="select-size">
-                <h6 class="width">Size</h6>
-                M <button class="btn btn-size click">${size.m}</button>
-                L <button class="btn btn-size">${size.l}</button>
-            </div>
-            <div class="select-ice">
-                <h6 class="width">Ice</h6>
-                <button class="btn btn-ice">${ice[0]}</button>
-                <button class="btn btn-ice">${ice[1]}</button>
-                <button class="btn btn-ice">${ice[2]}</button>
-            </div>
-            <div class="select-sugar">
-                <h6 class="width">Sugar</h6>
-                <button class="btn btn-sugar">${sugar[0]}</button>
-                <button class="btn btn-sugar">${sugar[1]}</button>
-                <button class="btn btn-sugar">${sugar[2]}</button>
-            </div>
-            <div class="topping">
-               <h1>${topping.td.name}</h1><button class="btn btn-tp">${topping.td.price}</button>
-               <h1>${topping.tcd.name}</h1><button class="btn btn-tp">${topping.tcd.price}</button>
-               <h1>${topping.tct.name}</h1> <button class="btn btn-tp">${topping.tct.price}</button>
-            </div>
-        </div>
-        <button class="btn-add">Added to cart</button>
-        `;
+const productList = document.querySelector('.product-list'),
+    cartSection = document.querySelector('.cart'),
+    priceInfo = document.querySelector('.price-info'),
+    bill = document.querySelector('.total span')
 
-        // Render size
+// Click Option 
+function handleOption() {
 
-        productList.appendChild(li)
-
-        // thêm sản phẩm vào giỏ hàng
-        li.querySelector('.btn-add').addEventListener('click', () => {
-            addProduct(li, product)
-        });
-    }
-    // Xử lí khi lựa chọn
-    handleClick()
-}
-renderProduct(products)
-
-function handleClick() {
-    const btn = document.querySelectorAll('.btn')
-    btn.forEach((button) => {
-        button.addEventListener('click', (e) => {
-            e.currentTarget.classList.toggle('click');
-            if (e.currentTarget.classList.contains('click')) {
-                button.parentElement.querySelectorAll('button').forEach((span) => {
-                    if (e.currentTarget !== span) {
-                        span.classList.remove('click')
-                    }
+    // Option main
+    document.querySelectorAll('.product-select.main ul li').forEach((option) => {
+        option.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('click')) {
+                document.querySelectorAll('.product-select.main ul li').forEach((li) => {
+                    li.classList.remove('click');
                 });
+                e.target.classList.add('click');
+            }
+        });
+    });
+    // Option categoty
+    document.querySelectorAll('.product-select.category ul li').forEach((option) => {
+        option.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('click')) {
+                document.querySelectorAll('.product-select.category ul li').forEach((li) => {
+                    li.classList.remove('click');
+                });
+                e.target.classList.add('click');
             }
         });
     });
 }
-let cartegory = {};
+handleOption()
+
+function renderProduc(params) {
+    if (!params) return false;
+    for (let product of params) {
+        let { id, image, name, price, size, ice, sugar, topping } = product;
+        const li = document.createElement('li');
+        li.classList.add('product-name');
+        li.innerHTML = '';
+        li.innerHTML = `
+            <div class="product-img">
+                <img src="${image}" alt="">
+            </div>
+            <div class="product-info">
+                <h2>${name}</h2><span class="price-size">${price.toLocaleString()}</span>
+                <div class="select-size">
+                    <h6 class="width">Size</h6>
+                    <div class="size"></div>
+                </div>
+                <div class="select-ice">
+                    <h6 class="width">Ice</h6>
+                    <div class="ice"></div>
+                </div>
+                <div class="select-sugar">
+                    <h6 class="width">Sugar</h6>
+                    <div class="sugar"></div>
+                </div>
+                <div class="topping">
+                <div class="topping"></div>
+                </div>
+            </div>
+            <button class="btn-add">Added to cart</button>
+        `;
+
+        productList.appendChild(li);
+
+        // render Size
+        for (let [k, v] of Object.entries(size)) {
+            const button = document.createElement('button');
+            button.classList.add('btn');
+            button.setAttribute('data-name', 'size');
+            button.setAttribute('data-value', k);
+            button.innerHTML = k;
+            button.addEventListener('click', () => {
+                li.querySelector('.price-size').innerHTML = v.toLocaleString()
+            })
+            li.querySelector('.size').appendChild(button);
+            handleClick(button)
+        }
+        li.querySelector('.size button').classList.add('click');
+
+        // render ice
+        for (let [k, v] of Object.entries(ice)) {
+            const button = document.createElement('button');
+            button.classList.add('btn');
+            button.setAttribute('data-name', 'ice');
+            button.setAttribute('data-value', v);
+            button.innerHTML = v;
+
+            li.querySelector('.ice').appendChild(button);
+
+            handleClick(button)
+        }
+
+        // render sugar
+        for (let [k, v] of Object.entries(sugar)) {
+            const button = document.createElement('button');
+            button.classList.add('btn');
+            button.setAttribute('data-name', 'sugar');
+            button.setAttribute('data-value', v);
+            button.innerHTML = v;
+
+            li.querySelector('.sugar').appendChild(button);
+            handleClick(button)
+        }
+        for (let [k, v] of Object.entries(topping)) {
+            const button = document.createElement('button');
+            button.classList.add('btn');
+            button.setAttribute('data-name', 'topping');
+            button.setAttribute('data-value', k);
+            button.innerHTML = `
+                ${v.name} + ${v.price.toLocaleString()}
+            `;
+
+            li.querySelector('.topping').appendChild(button);
+            handleClick(button)
+        }
+
+        li.querySelector('.btn-add').addEventListener('click', () => {
+            addProduct(li, product)
+        })
+    }
+}
+renderProduc(products)
+
+function handleClick(button) {
+    button.addEventListener('click', (e) => {
+        e.target.classList.toggle('click')
+        if (e.target.classList.contains('click')) {
+            button.parentElement.querySelectorAll('button').forEach((btn) => {
+                if (e.target !== btn) {
+                    btn.classList.remove('click')
+                }
+            });
+        }
+    });
+}
 
 function addProduct(li, product) {
-    let { id, image, name, price, size, ice, sugar, topping } = product
+    let { id, image, name, price, size, ice, sugar, topping } = product;
+    let newProduct = {
+            name: name,
+            quantity: 1,
+            totalPrice: price,
+            image: image,
 
-    let newProduct = {}
-    let choiceSize;
-    let choiceIce;
-    let choiceSugar;
-    let choiceTopping;
-    newProduct.name = name;
-    newProduct.quantity = 1;
-    newProduct.totalPrice = price;
+        },
+        choiceSize,
+        choiceIce,
+        choiceSugar,
+        choiceTopping
+
 
     // Khi không chọn size
-    if (!li.querySelector('.btn-size.click')) {
-        alert('Vui lòng chọn size');
+    if (!li.querySelector('[data-name="size"].click')) {
+        alert('Vui lòng chọn size')
         return false
     }
-    // Khi không chọn ice
-    if (!li.querySelector('.btn-ice.click')) {
-        alert('Vui lòng chọn ice');
+
+    // Khi không chọn đá
+    if (!li.querySelector('[data-name="ice"].click')) {
+        alert('Vui lòng chọn đá')
         return false
     }
     // Khi không chọn sugar
-    if (!li.querySelector('.btn-sugar.click')) {
-        alert('Vui lòng chọn đường');
+    if (!li.querySelector('[data-name="sugar"].click')) {
+        alert('Vui lòng chọn đường')
         return false
     }
 
-    // Khi chọn size
-    if (li.querySelector('.btn-size.click')) {
-        choiceSize = li.querySelector('.btn-size.click').innerHTML;
-        newProduct.price = parseInt(choiceSize)
+    // Khi đã chọn size
+    if (li.querySelector('[data-name="size"].click')) {
+        choiceSize = li.querySelector('[data-name="size"].click').getAttribute('data-value');
+        newProduct.size = choiceSize;
+        newProduct.price = size[choiceSize];
     }
-    // Khi chọn ice
-    if (li.querySelector('.btn-ice.click')) {
-        choiceIce = li.querySelector('.btn-ice.click').innerHTML;
-        newProduct.ice = choiceIce
+
+    // Khi đã chọn đá
+    if (li.querySelector('[data-name="ice"].click')) {
+        choiceIce = li.querySelector('[data-name="ice"].click').getAttribute('data-value');
+        newProduct.ice = choiceIce;
     }
-    // Khi chọn sugar
-    if (li.querySelector('.btn-sugar.click')) {
-        choiceSugar = li.querySelector('.btn-sugar.click').innerHTML;
-        newProduct.ice = choiceSugar
+
+    // Khi đã chọn đường
+    if (li.querySelector('[data-name="sugar"].click')) {
+        choiceSugar = li.querySelector('[data-name="sugar"].click').getAttribute('data-value');
+        newProduct.sugar = choiceSugar;
     }
-    // Khi chọn topping
-    if (li.querySelector('.btn-tp.click')) {
-        choiceTopping = li.querySelector('.btn-tp.click').innerHTML;
-        newProduct.price = newProduct.price + parseInt(choiceTopping)
-        newProduct.totalPrice = newProduct.price
+
+    // Khi đã chọn topping
+    if (li.querySelector('[data-name="topping"].click')) {
+        choiceTopping = li.querySelector('[data-name="topping"].click').getAttribute('data-value');
+        newProduct.topping = topping[choiceTopping]['name'];
+        newProduct.price += topping[choiceTopping]['price'];
+        newProduct.totalPrice = newProduct.price;
     } else {
         newProduct.topping = '';
     }
+    let key
+    if (choiceTopping) {
+        key = `${id}-${choiceSize}-ice${choiceIce}-sugar${choiceSugar}-${choiceTopping}`;
+    }
 
-    let key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}-${choiceTopping}`;
     if (!choiceTopping) {
-        key = `${id}-${choiceSize}-${choiceIce}-${choiceSugar}`;
+        key = `${id}-${choiceSize}-ice${choiceIce}-sugar${choiceSugar}`;
     }
-    // Xử lý khi sản phẩm trùng lặp
 
-    if (cartegory[key]) {
-        // const quantityInput = document.querySelector('.quantity-input')
-        // if (quantityInput) {
-        //     quantityInput.value++;
-        //     return;
-        // }
-        cartegory[key]['quantity'] += 1
-            // cartegory[key]['totalPrice'] = cartegory[key]['quantity'] * cartegory[key]['price']
+    // Xử lý khi bị trùng lặp sản phẩm
+    if (cart[key]) {
+        cart[key]['quantity'] += 1;
+        cart[key]['totalPrice'] = cart[key]['quantity'] * cart[key]['price'];
+        // alert('sản phẩm đã có trong giỏ hàng')
+        // return;
     } else {
-        cartegory[key] = newProduct
+        cart[key] = newProduct
     }
-    renderCart(cartegory, product)
+    console.log()
+    renderCart(cart)
 }
 
-function renderCart(cartegory, product) {
-    let { id, image, name, price, size, ice, sugar, topping } = product
-    for (let [k, v] of Object.entries(cartegory)) {
-        if (document.querySelector('.btn-size.click') && document.querySelector('.btn-ice.click') && document.querySelector('.btn-sugar.click')) {
-            const div = document.createElement('div');
-            cart.classList.add('show')
-            div.classList.add('cart-info');
-            div.innerHTML = '';
-            div.innerHTML = `
-            <div class="cart-img">
-                <img src="${image}" alt="">
+function renderCart(cart) {
+    let total = 0;
+    priceInfo.innerHTML = '';
+    cartSection.classList.add('show')
+    for (let [k, v] of Object.entries(cart)) {
+        let { name, image, quantity, topping, price, ice, sugar, size, totalPrice } = v,
+        product = `
+        <div class="cart-img">
+            <img src="${image}" alt="">
+        </div>
+        <div class="pay-info">
+            <h6 class="title">${name}</h6>
+            <span>${totalPrice.toLocaleString()}</span>
+            <button class="delete">Delete</button>
+        <div class="price">
+            <div class="quantity">
+                <button class="quantity-button decrease">-</button>
+                <input type="number" class="quantity-input" value="${quantity}" min="1">
+                <button class="quantity-button increase">+</button>
             </div>
-            <div class="pay-info">
-                <h6 class="title">${v.name}</h6>
-                <span>${v.price}</span>
-                <button class="delete" data-id = ${k}>Delete</button>
-                <div class="price">
-                    <div class="quantity">
-                        <button class="quantity-button decrease">-</button>
-                        <input type="number" class="quantity-input" value="${v.quantity}" min="1">
-                        <button class="quantity-button increase">+</button>
-                    </div>
-                </div>
-            </div>
-            `;
-            priceInfo.appendChild(div);
-            // Xóa sản phẩm
-            document.querySelectorAll('.delete').forEach((btnDelete) => {
-                btnDelete.addEventListener('click', (e) => {
-                    deleteProduct(e, k, btnDelete);
-                });
-            });
+        </div>
+        </div>
+        `;
+        const div = document.createElement('div');
+        div.classList.add('cart-info');
 
-            // Thay đổi số lượng sản phẩm
-            div.querySelectorAll('.quantity-button').forEach((quantityBtn) => {
-                quantityBtn.addEventListener('click', (btn) => {
-                    const quantityInput = div.querySelector('.quantity-input')
-                    changeProduct(btn, quantityInput, v);
-                });
-            });
+        div.innerHTML = `
+		${product}
+		`;
 
-            // Tổng tiền tất cả các sản phẩm
-            totalAllProduct(cartegory, v);
+        // Xóa sản phẩm
+        div.querySelector('.delete').addEventListener('click', () => {
+            deleteProduct(k);
+        });
 
-            // Đóng giỏ hàng
-            closeCart()
-                // console.log(div.querySelector('.delete'))
-        }
+        // Thay đổi số lượng sản phẩm
+        changeProduct(k, div);
+
+        // Đóng giỏ hàng
+        closeCart()
+
+        priceInfo.appendChild(div);
+
+        total += totalPrice;
+    }
+
+    bill.innerHTML = `
+	<span>${total.toLocaleString()}</span>
+	`;
+}
+
+function deleteProduct(k) {
+    const agreeDelete = confirm('Bạn muốn xóa món này khỏi giỏ hàng')
+    if (agreeDelete === true) {
+        delete cart[k];
+        renderCart(cart);
     }
 }
 
-function deleteProduct(k, e, btnDelete) {
-    console.log(Object.keys(cartegory)[0])
-        // const deleteItem = document.querySelector(`.cart-info [data-id="${k}"]`);
-        // if (deleteItem) {
-        //     const parent = deleteItem.parentElement.parentElement;
-        //     if (parent) {
-        //         parent.remove();
-        //         totalAllProduct();
-        //     }
-        // }
-
-    const parent = btnDelete.parentElement.parentElement
-    parent.remove()
-    totalAllProduct();
-}
-
-function changeProduct(btn, quantityInput, v) {
-    if (btn.currentTarget.classList.contains('decrease')) {
-        if (quantityInput.value < 2) {
-            alert('Không thể giảm số lượng sản phẩm thêm được nữa')
-        } else {
-            v.quantity -= 1;
-            quantityInput.value = v.quantity
-            totalAllProduct();
-        }
-    }
-    if (btn.currentTarget.classList.contains('increase')) {
-        v.quantity += 1;
-        quantityInput.value = v.quantity
-        totalAllProduct();
-    }
-}
-
-function totalAllProduct() {
-    const cartInfo = document.querySelectorAll('.cart-info');
-    let totalAllItem = 0;
-    for (let items of cartInfo) {
-        priceProduct = items.querySelector('.pay-info span').innerHTML;
-        quantityProduct = items.querySelector('.quantity-input').value;
-        const priceItem = parseInt(priceProduct) * quantityProduct;
-        totalAllItem += priceItem;
-    }
-    billTotal.innerHTML = totalAllItem
+function changeProduct(k, div) {
+    const quantityButton = div.querySelectorAll('.quantity-button')
+    quantityButton.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            if (e.target.classList.contains('decrease')) {
+                cart[k]['quantity'] -= 1
+                if (cart[k]['quantity'] <= 0) {
+                    cart[k]['quantity'] = 1
+                    alert('Không thể giảm số lượng sản phẩm được nữa')
+                    return
+                } else {
+                    cart[k]['totalPrice'] = cart[k]['quantity'] * cart[k]['price']
+                }
+                renderCart(cart)
+                return
+            }
+            if (e.target.classList.contains('increase')) {
+                cart[k]['quantity'] += 1
+                cart[k]['totalPrice'] = cart[k]['quantity'] * cart[k]['price']
+                renderCart(cart)
+                return
+            }
+        })
+    })
 }
 
 function closeCart() {
     const icon = document.querySelector('.icon')
     icon.addEventListener('click', () => {
-        if (icon) {
-            cart.classList.remove('show')
-        }
+        cartSection.classList.remove('show')
     })
 }
